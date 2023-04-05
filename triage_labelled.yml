@@ -6,11 +6,16 @@ on:
       config-path:
         required: true
         type: string
+      triage-board:
+        required: true
+        type: string
+        # options: "web", "ios", "android", "meta"
     secrets:
       token:
         required: true
 
 jobs:
+
   needs-info:
     name: Move needs-info issues
     runs-on: ubuntu-latest
@@ -19,6 +24,34 @@ jobs:
       STATUS_FIELD_ID: "PVTSSF_lAHNyc_Ng-rOAAN9pQ"
       STATUS_IN_PROGRESS: "47fc9ee4"
     steps:
+        - name: web-config
+          if: inputs.triage-board == "web"
+          run: |
+            echo "PROJECT_ID=PVT_kwHNyc_Ng-o" >> $GITHUB_ENV
+            echo "STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "STATUS_IN_PROGRESS=47fc9ee4" >> $GITHUB_ENV
+            echo "Configured for element-web"
+        - name: ios-config
+          if: inputs.triage-board == "ios"
+          run: |
+            echo "PROJECT_ID=PVT_kwHNyc_Ng-o" >> $GITHUB_ENV
+            echo "STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "STATUS_IN_PROGRESS=47fc9ee4" >> $GITHUB_ENV
+            echo "Configured for element-ios"
+        - name: android-config
+          if: inputs.triage-board == "android"
+          run: |
+            echo "PROJECT_ID=PVT_kwHNyc_Ng-o" >> $GITHUB_ENV
+            echo "STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "STATUS_IN_PROGRESS=47fc9ee4" >> $GITHUB_ENV
+            echo "Configured for element-android"
+        - name: meta-config
+          if: inputs.triage-board == "meta"
+          run: |
+            echo "PROJECT_ID=PVT_kwHNyc_Ng-o" >> $GITHUB_ENV
+            echo "STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "STATUS_IN_PROGRESS=47fc9ee4" >> $GITHUB_ENV
+            echo "Configured for element-meta"
       - name: Add to board
         id: board
         uses: octokit/graphql-action@v2.x
