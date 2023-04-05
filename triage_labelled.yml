@@ -1,0 +1,64 @@
+name: Reusable workflow example
+
+on:
+  workflow_call:
+    inputs:
+      config-path:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  needs-info:
+    name: Move needs-info issues
+    runs-on: ubuntu-latest
+    env:
+      PROJECT_ID: "PVT_kwHNyc_Ng-o"
+      STATUS_FIELD_ID: "PVTSSF_lAHNyc_Ng-rOAAN9pQ"
+      STATUS_IN_PROGRESS: "47fc9ee4"
+    steps:
+      - name: Add to board
+        id: board
+        uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!, $contentid:ID!) {
+              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
+                item {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
+
+      - name: Move to right column
+        uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation ($projectid:ID!, $itemid:ID!, $fieldid:ID!, $optionid:String!) {
+              updateProjectV2ItemFieldValue(input: {
+                projectId: $projectid
+                itemId: $itemid
+                fieldId: $fieldid
+                value: {
+                  singleSelectOptionId: $optionid
+                }
+              }) {
+                projectV2Item {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          itemid: ${{ fromJSON(steps.board.outputs.data).addProjectV2ItemById.item.id }}
+          fieldid: ${{ env.STATUS_FIELD_ID }}
+          optionid: ${{ env.STATUS_IN_PROGRESS }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.token }}
