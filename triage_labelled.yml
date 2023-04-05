@@ -28,30 +28,44 @@ jobs:
           if: inputs.triage-board == "web"
           run: |
             echo "PROJECT_ID=PVT_kwHNyc_Ng-o" >> $GITHUB_ENV
-            echo "STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "NEEDS_INFO_STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "NEEDS_DESIGN_STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
             echo "STATUS_IN_PROGRESS=47fc9ee4" >> $GITHUB_ENV
             echo "Configured for element-web"
         - name: ios-config
           if: inputs.triage-board == "ios"
           run: |
             echo "PROJECT_ID=PVT_kwHNyc_Ng-o" >> $GITHUB_ENV
-            echo "STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "NEEDS_INFO_STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "NEEDS_DESIGN_STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
             echo "STATUS_IN_PROGRESS=47fc9ee4" >> $GITHUB_ENV
             echo "Configured for element-ios"
         - name: android-config
           if: inputs.triage-board == "android"
           run: |
             echo "PROJECT_ID=PVT_kwHNyc_Ng-o" >> $GITHUB_ENV
-            echo "STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "NEEDS_INFO_STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "NEEDS_DESIGN_STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
             echo "STATUS_IN_PROGRESS=47fc9ee4" >> $GITHUB_ENV
             echo "Configured for element-android"
         - name: meta-config
           if: inputs.triage-board == "meta"
           run: |
             echo "PROJECT_ID=PVT_kwHNyc_Ng-o" >> $GITHUB_ENV
-            echo "STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "NEEDS_INFO_STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
+            echo "NEEDS_DESIGN_STATUS_FIELD_ID=PVTSSF_lAHNyc_Ng-rOAAN9pQ" >> $GITHUB_ENV
             echo "STATUS_IN_PROGRESS=47fc9ee4" >> $GITHUB_ENV
             echo "Configured for element-meta"
+        - name: labelled-design
+          if: contains(github.event.issue.labels.*.name, 'x-needs-design') 
+          run: |
+            echo "STATUS_FIELD_ID=$NEEDS_DESIGN_STATUS_FIELD_ID" >> $GITHUB_ENV
+            echo "Labelled needs-design"
+        - name: labelled-moreinfo
+          if: contains(github.event.issue.labels.*.name, 'x-needs-more-info') 
+          run: |
+            echo "STATUS_FIELD_ID=$NEEDS_INFO_STATUS_FIELD_ID" >> $GITHUB_ENV
+            echo "Labelled needs-info"
       - name: Add to board
         id: board
         uses: octokit/graphql-action@v2.x
