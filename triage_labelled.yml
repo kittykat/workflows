@@ -19,10 +19,10 @@ jobs:
   needs-info:
     name: Move needs-info issues
     runs-on: ubuntu-latest
-    env:
-      PROJECT_ID: "PVT_kwHNyc_Ng-o"
-      STATUS_FIELD_ID: "PVTSSF_lAHNyc_Ng-rOAAN9pQ"
-      STATUS_IN_PROGRESS: "47fc9ee4"
+#    env:
+#      PROJECT_ID: "PVT_kwHNyc_Ng-o"
+#      STATUS_FIELD_ID: "PVTSSF_lAHNyc_Ng-rOAAN9pQ"
+#      STATUS_IN_PROGRESS: "47fc9ee4"
     steps:
         - name: web-config
           if: inputs.triage-board == "web"
